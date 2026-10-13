@@ -8,6 +8,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -35,44 +37,16 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Column(
                         modifier = Modifier
-                        .padding(innerPadding)
-                        .padding(24.dp)
+                            .padding(innerPadding)
+                            .verticalScroll(rememberScrollState())
                     ) {
-                    Text(text = "KampusGo")
-                        // Screen 1 input. "name" here is the text, not the Intent extra yet.
-                    OutlinedTextField(
-                        value = name,
-                        onValueChange = { name = it },
-                        label = { Text("Your name") }
-                    )
-                    OutlinedTextField(
-                        value = npm,
-                        onValueChange = { npm = it },
-                        label = { Text("Your NPM") }
-                    )
-                    Button(onClick = {
-                        if (npm.isBlank() || npm == "-") {
-                            npm = "-"
-                        } else {
-                        // Explicit Intent: open ProfileActivity, which is our own screen.
-                            val intent = Intent(activity, ProfileActivity::class.java)
-                            // Attach the typed name under the label "name". Screen 2 reads that same label.
-                            intent.putExtra("name", name)
-                            intent.putExtra("npm", npm)
-                            // Ask Android to create screen 2 and show it.
-                            activity.startActivity(intent)
+                        ProfileForm(modifier = Modifier.padding(24.dp))
+                        Button(onClick = {
+                            activity.startActivity(Intent(activity, ProfileXmlActivity::class.java))
+                        }) {
+                            Text("XML form")
                         }
-                    }) {
-                        Text("Open profile")
                     }
-                    Button(onClick = {
-                        // Explicit Intent. This opens the XML activity, not ProfileActivity.
-                        val intent = Intent(activity, ProfileXmlActivity::class.java)
-                        activity.startActivity(intent)
-                    }) {
-                        Text("XML form")
-                    }
-                }
                 }
             }
         }
